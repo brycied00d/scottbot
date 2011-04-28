@@ -14,7 +14,7 @@ Requirements
 
 * Redis_. I'm running 2.2.5. Any 2.2.x or higher is probably fine.
 
-* A sense of humor and some patients.
+* A sense of humor and some patience.
 
 * IRC mates that won't kill you.
 
@@ -30,8 +30,7 @@ Start scottbot from the command line::
     $ node scottbot.js [options]
 
 If you want to see all the options, use the ``-h`` option. At a minimum, you'll
-probably want to specify an IRC server and some channels to join. (Eventually
-I'd like to make it respond to ``/invite``, too.)
+probably want to specify an IRC server and some channels to join.
 
 scottbot doesn't detach from the terminal or anything fancy like that, and the
 error handling is *probably* robust enough to keep anything horrible from
