@@ -119,6 +119,8 @@ TODO
 
 * A better way to train correct negatives.
 
+* Train when someone else makes a TWSS joke.
+
 * Stemming. It stinks that "stick" and "stuck" don't get trained together.
 
 * Stopwords. Remember that "it", "he" and "she" are crucial to these jokes.
