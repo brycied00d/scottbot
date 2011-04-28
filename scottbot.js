@@ -93,3 +93,9 @@ client.addListener("message", function(from, to, message) {
         }
     }
 });
+
+client.addListener("invite", function(channel, from) {
+    client.join(channel, function() {
+        client.say(from, "Joined " + channel);
+    });
+});
