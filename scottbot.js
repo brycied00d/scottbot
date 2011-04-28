@@ -79,7 +79,7 @@ client.addListener("message", function(from, to, message) {
                     client.say(target, "ok!");
                 });
             } else if (message.match(/lol/i)) {
-                bayes.train(lastLine[target], "funny"/*, function() {}*/);
+                bayes.train(lastLine[target], "funny", function() {});
             } else if (message.match(/botsnack/i)) {
                 client.say(target, "nom nom nom");
             }
