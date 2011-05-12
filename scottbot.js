@@ -4,95 +4,96 @@ var sys = require("sys");
 var st = process.openStdin();
 
 var brain = require("brain"),
-    irc = require("irc"),
-    options = require("nomnom").opts({
-        host: {
-            string: "-H HOST, --host=HOST",
-            default: "localhost",
-            help: "What IRC network to connect to. (Default: localhost)"
-        },
-        nick: {
-            string: "-n NICK, --nick=NICK",
-            default: "mscott",
-            help: "IRC nick to use. (Default: mscott)"
-        },
-        channels: {
-            string: "-c CHANNELS, --channels=CHANNELS",
-            default: "",
-            help: "IRC channels to join (comma-separated, no '#')."
-        },
+	irc = require("irc"),
+	options = require("nomnom").opts({
+		host: {
+			string: "-H HOST, --host=HOST",
+			default: "localhost",
+			help: "What IRC network to connect to. (Default: localhost)"
+		},
+		nick: {
+			string: "-n NICK, --nick=NICK",
+			default: "mscott",
+			help: "IRC nick to use. (Default: mscott)"
+		},
+		channels: {
+			string: "-c CHANNELS, --channels=CHANNELS",
+			default: "",
+			help: "IRC channels to join (comma-separated, no '#')."
+		},
 		allowed: {
 			string: "-a NICKS, --allowed=NICKS",
 			default: "",
 			help: "IRC nicks to allowed to teach ( comma-seperated )."
 		},
-        redisHost: {
-            string: "--redis-host=HOST",
-            default: "localhost",
-            help: "Redis host to use. (Default: localhost)"
-        },
-        redisPort: {
-            string: "--redis-port=PORT",
-            default: 6379,
-            help: "Redis port to use. (Default: 6379)"
-        }
-    }).parseArgs();
-    lastLine = {};
+		redisHost: {
+			string: "--redis-host=HOST",
+			default: "localhost",
+			help: "Redis host to use. (Default: localhost)"
+		},
+		redisPort: {
+			string: "--redis-port=PORT",
+			default: 6379,
+			help: "Redis port to use. (Default: 6379)"
+		}
+	}).parseArgs();
+
+lastLine = {};
 
 var bayes = new brain.BayesianClassifier({
-    backend: {
-        type: "redis",
-        options: {
-            hostname: options.redisHost,
-            port: options.redisPort,
-            name: "scottbot"
-        }
-    },
-    thresholds: {
-        funny: 3,
-        notfunny: 1
-    },
-    def: "notfunny"
+	backend: {
+		type: "redis",
+		options: {
+			hostname: options.redisHost,
+			port: options.redisPort,
+			name: "scottbot"
+		}
+	},
+	thresholds: {
+		funny: 3,
+		notfunny: 1
+	},
+	def: "notfunny"
 });
 
 var CHANNELS = options.channels.split(',');
 var ALLOWED = options.allowed.split(',');
 
 CHANNELS.forEach(function(channel, i) {
-    CHANNELS[i] = '#' + channel.trim();
+	CHANNELS[i] = '#' + channel.trim();
 });
 
 var client = new irc.Client(options.host, options.nick, {
-    channels: CHANNELS
+	channels: CHANNELS
 });
 
 // Bit to allow me to manually send input and add users to the include list
 client.addListener("error", function(msg) {
-    console.log(msg);
+	console.log(msg);
 });
 
 st.addListener( "data", function(d) {
-    var string = d.toString().replace( /\n/, '' );
-    var parts = string.split( /:/ );
+	var string = d.toString().replace( /\n/, '' );
+	var parts = string.split( /:/ );
 
-    if ( parts[0] === "addUser" ) {
-        sys.print( "Adding user: " + parts[1] + "\n" );
-        ALLOWED.push( parts[1] );
-    }
+	if ( parts[0] === "addUser" ) {
+		sys.print( "Adding user: " + parts[1] + "\n" );
+		ALLOWED.push( parts[1] );
+	}
 
-    if ( parts[0] === "addFunny" ) {
-        sys.print( "Adding funny phrase: " + parts[1] + "\n" );
+if ( parts[0] === "addFunny" ) {
+	sys.print( "Adding funny phrase: " + parts[1] + "\n" );
 		bayes.train( parts[1], "funny", function() {
 			sys.print( "ok!"  + "\n");
 		});
-    }
+	}
 
-    if ( parts[0] === "rmFunny" ) {
-        sys.print( "Removing funny phrase: " + parts[1] + "\n" );
+	if ( parts[0] === "rmFunny" ) {
+		sys.print( "Removing funny phrase: " + parts[1] + "\n" );
 		bayes.train( parts[1], "notfunny", function() {
 			sys.print( "sorry :("  + "\n");
 		});
-    }
+	}
 
 	sys.print(">");
 }).addListener( "end", function() {
@@ -111,13 +112,13 @@ function oc( a ) {
 }
 
 client.addListener("message", function(from, to, message) {
-    var target, isChannel = false;
-    if (to.indexOf("#") == 0) {
-        target = to;
-        isChannel = true;
-    } else {
-        target = from;
-    }
+	var target, isChannel = false;
+	if (to.indexOf("#") == 0) {
+		target = to;
+		isChannel = true;
+	} else {
+		target = from;
+	}
 
 	if (isChannel) {
 		if (message.indexOf(options.nick) == 0) {
@@ -163,7 +164,7 @@ client.addListener("message", function(from, to, message) {
 });
 
 client.addListener("invite", function(channel, from) {
-    client.join(channel, function() {
-        client.say(from, "Joined " + channel);
-    });
+	client.join(channel, function() {
+		client.say(from, "Joined " + channel);
+	});
 });
