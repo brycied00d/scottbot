@@ -113,11 +113,16 @@ function oc( a ) {
 
 client.addListener("message", function(from, to, message) {
 	var target, isChannel = false;
-	if (to.indexOf("#") == 0) {
+
+	if ( to in oc( CHANNELS ) ) {
 		target = to;
 		isChannel = true;
 	} else {
 		target = from;
+	}
+
+	if ( message === "that's what she said" ) {
+		isChannel = false;
 	}
 
 	if (isChannel) {
@@ -159,6 +164,8 @@ client.addListener("message", function(from, to, message) {
 				}
 			});
 		}
+	} else {
+		client.say( target, message, ", got it!" );
 	}
 
 });
