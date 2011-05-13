@@ -1,5 +1,13 @@
 require.paths.unshift("./node_modules");
 
+var responses = [
+	"that's what she said",
+	"twss",
+	"TWSS",
+	"That's what..... oh.. effit - i quit!",
+	"ohlol, that's what she said"
+];
+
 var sys = require("sys");
 var st = process.openStdin();
 
@@ -130,7 +138,7 @@ client.addListener("message", function(from, to, message) {
 			if (message.match(/no/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "notfunny", function() {
-						client.say(target, "sorry :(");
+						client.say(target, "sorry :( ( '" + lastLine[target] + "' )");
 					});
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
@@ -138,7 +146,7 @@ client.addListener("message", function(from, to, message) {
 			} else if (message.match(/yes/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
-						client.say(target, "ok!");
+						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
 					});
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
@@ -162,7 +170,7 @@ client.addListener("message", function(from, to, message) {
 			lastLine[target] = message;
 			bayes.classify(message, function(category) {
 				if (category == "funny") {
-					client.say(target, "that's what she said");
+					client.say(target, responses[ Math.floor( Math.random() * responses.length )] );
 				}
 			});
 		}
