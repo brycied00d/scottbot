@@ -97,19 +97,13 @@ phrase to "funny" or "notfunny".  The available commands are: "addUser",
 
 ::
     >addFunny:put it in my inbox
-
     Adding funny phrase: put it in my inbox
     ok!
-
     >addUser:potatoman
-
     Adding user: dbtid
-
     >rmFunny:nerd
-
     Removing funny phrase: nerd
     sorry :(
-
     >
 
 
