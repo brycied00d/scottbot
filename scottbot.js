@@ -159,12 +159,22 @@ client.addListener("message", function(from, to, message) {
 				client.say(target, "nom nom nom");
 			}
 		} else {
-			lastLine[target] = message;
-			bayes.classify(message, function(category) {
-				if (category == "funny") {
-					client.say(target, "that's what she said");
+			if (message.match(/twss/i)) {
+				if ( from in oc( ALLOWED )) {
+					bayes.train(lastLine[target], "funny", function() {
+						client.say(target, "ok!");
+					});
+				} else {
+					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			});
+			} else {
+				lastLine[target] = message;
+				bayes.classify(message, function(category) {
+					if (category == "funny") {
+						client.say(target, "that's what she said");
+					}
+				});
+			}
 		}
 	} else {
 		client.say( target, message, ", got it!" );
