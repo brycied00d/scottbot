@@ -151,6 +151,8 @@ client.addListener("message", function(from, to, message) {
 				client.say(target, "I phear you have rooted me!!");
 			} else if (message.match(/o\//i)) {
 				client.say(target, "\\o");
+			} else if (message.match(/\\o/i)) {
+				client.say(target, "o/");
 			} else if (message.match(/lsAllowed/i)) {
 				client.say(target, ALLOWED.join( ", " ) );
 			} else if (message.match(/botsnack/i)) {
