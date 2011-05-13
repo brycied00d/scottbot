@@ -96,6 +96,7 @@ phrase to "funny" or "notfunny".  The available commands are: "addUser",
 <cmd>:<phrase or user>
 
 ::
+
     >addFunny:put it in my inbox
     Adding funny phrase: put it in my inbox
     ok!
