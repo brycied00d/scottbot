@@ -4,7 +4,6 @@ var responses = [
 	"that's what she said",
 	"twss",
 	"TWSS",
-	"That's what..... oh.. effit - i quit!",
 	"ohlol, that's what she said"
 ];
 
@@ -161,6 +160,8 @@ client.addListener("message", function(from, to, message) {
 				client.say(target, "\\o");
 			} else if (message.match(/\\o/i)) {
 				client.say(target, "o/");
+			} else if (message.match(/pew/i)) {
+				client.say(target, "pewpewpew");
 			} else if (message.match(/lsAllowed/i)) {
 				client.say(target, ALLOWED.join( ", " ) );
 			} else if (message.match(/botsnack/i)) {
