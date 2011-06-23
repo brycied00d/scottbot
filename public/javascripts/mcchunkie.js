@@ -1,9 +1,8 @@
-$( document).ready( function() {
+function load() {
 	$.ajax( {
 		url: '/brains',
 		type: 'GET',
 		success: function( data ) {
-			console.log( data );
 			var table = $( '<table id="brains_table">' );
 			table.append( $( '<thead><tr><th>word</th><th>funny</th><th>notfunny</th></thead>' ) );
 			for ( var word in data[0].words ) {
@@ -31,4 +30,13 @@ $( document).ready( function() {
 			alert( stat + " : " + err );
 		}
 	});
+}
+$( document).ready( function() {
+	load();
+
+	$( '#refresh' ).click( function() {
+		$( '#brains_table' ).remove(  );
+		load();
+	});
 });
+
