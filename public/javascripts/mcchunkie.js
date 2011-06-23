@@ -6,12 +6,13 @@ $( document).ready( function() {
 			console.log( data );
 			var table = $( '<table id="brains_table">' );
 			table.append( $( '<thead><tr><th>word</th><th>funny</th><th>notfunny</th></thead>' ) );
-			var cssClass = 'notfunny';
 			for ( var word in data[0].words ) {
-				var funny = data[0].words[word].funny || 0;
-				var notfunny = data[0].words[word].notfunny || 0;
+				var funny = parseInt( data[0].words[word].funny, 10 ) || 0;
+				var notfunny = parseInt( data[0].words[word].notfunny, 10 ) || 0;
 
-				if ( funny > notfunny ) cssClass = 'funny';
+				var cssClass = 'notfunny';
+
+				if ( funny >= notfunny ) cssClass = 'funny';
 
 				var tr = $( '<tr>' ).addClass( cssClass );
 
