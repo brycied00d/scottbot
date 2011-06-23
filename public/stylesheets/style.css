@@ -1,0 +1,35 @@
+body {
+  padding: 50px;
+  margin: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+table { 
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+table tr {
+	border: 1px solid black;
+}
+
+table thead {
+	text-align: center;
+	cursor: pointer;
+}
+
+table thead th {
+	border: 1px solid black;
+}
+
+.funny {
+	background-color: #99FF66;
+}
+
+.notfunny {
+	background-color: #eee;
+}

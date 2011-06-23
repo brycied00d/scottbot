@@ -9,6 +9,19 @@ var responses = [
 
 var sys = require("sys");
 var st = process.openStdin();
+var express = require( 'express' );
+var app = module.exports = express.createServer();
+
+app.configure( function( ){
+	app.set( 'views', __dirname + '/views' );
+	app.set( 'view engine', 'jade' );
+	app.use( express.bodyParser( ) );
+	app.use( express.cookieParser( ) );
+	app.use( express.session( { secret: "mcpewpew" } ));
+	app.use( express.methodOverride( ) );
+	app.use( app.router );
+	app.use( express.static( __dirname + '/public' ) );
+});
 
 var brain = require("brain"),
 	irc = require("irc"),
@@ -46,6 +59,32 @@ var brain = require("brain"),
 	}).parseArgs();
 
 lastLine = {};
+
+function createBayes(options) {
+  return new brain.BayesianClassifier({
+      backend: {
+          type: "redis",
+          options: {
+              hostname: options.redisHost,
+              port: options.redisPort,
+              name: "scottbot"
+          }
+      }
+  });
+};
+
+app.get( '/', function( req, res ) {
+	res.render( 'index' );
+});
+
+app.get( '/brains', function( req, res ) {
+	var brain = [];
+	createBayes( options ).toJSON( function( json ) {
+		res.send( [ json ] );
+	});
+});
+
+app.listen( 1337 );
 
 var bayes = new brain.BayesianClassifier({
 	backend: {
