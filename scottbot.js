@@ -4,6 +4,7 @@ var responses = [
 	"that's what she said",
 	"twss",
 	"TWSS",
+	"THat's what CosmiCruz said!",
 	"ohlol, that's what she said"
 ];
 
