@@ -243,6 +243,7 @@ client.addListener("message", function(from, to, message) {
 				if ( from in oc( ALLOWED ) ) {
 					bayes.train( lastLine[target], "funny", function() {
 						client.say( target, "ok!" );
+						write( lastLine[target], true );
 					});
 				} else {
 					sys.print( "blocking learn request from " + from + "\n>" );
