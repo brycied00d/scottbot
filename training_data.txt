@@ -199,3 +199,5 @@
 "Not Funny", "yay%20mcchunkie"
 "Funny", "I%20expect%20retards%20to%20cease%20their%20retarded%20behaviour%20posthaste%20and%20join%20the%20ranks%20of%20decent%20society"
 "Not Funny", "I%20expect%20retards%20to%20cease%20their%20retarded%20behaviour%20posthaste%20and%20join%20the%20ranks%20of%20decent%20society"
+"Funny", "oh%20yeah%2C%20put%20it%20in%20my%20mouth%21"
+"Funny", "It%20feels%20like%20my%20insides%20are%20breaking"
