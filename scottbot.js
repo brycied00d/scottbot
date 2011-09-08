@@ -240,6 +240,8 @@ client.addListener("message", function(from, to, message) {
 					if ( err ) throw err;
 					client.say(target, data.toString() );
 				});
+			} else if (message.match(/^wtf$/i)) {
+				client.say(target, "I don't know, mate. You tell me.");
 			}
 		} else {
 			if ( message.match( /twss/i ) ) {
