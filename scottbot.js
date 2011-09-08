@@ -4,13 +4,14 @@ var responses = [
 	"that's what she said",
 	"twss",
 	"TWSS",
-	"THat's what CosmiCruz said!",
+	"That's what CosmiCruz said!",
 	"ohlol, that's what she said"
 ];
 
 var sys = require("sys");
 var st = process.openStdin();
 var express = require( 'express' );
+var fs = require( 'fs' );
 var app = module.exports = express.createServer();
 
 app.configure( function( ){
@@ -158,6 +159,27 @@ function oc( a ) {
 	return o;
 }
 
+function write( msg, funny ) {
+	var str = '"Not Funny"';
+
+	if ( funny ) str = '"Funny"';
+
+	fs.open('./training_data.txt', 'a', 666, function( e, id ) {
+		fs.write( id, str + ", " + '"' + escape( msg ) + '"\n', null, 'utf8', function(){
+			fs.close(id, function(){
+				console.log( "Added a " + str ) ;
+			});
+		});
+	});
+	// fs.writeFile( './training_data.txt', str + ", " + escape( msg ), function( err ) {
+	// 	if ( err ) {
+	// 		console.log( err );
+	// 	} else {
+	// 		console.log( "Added a " + str ) ;
+	// 	}
+	// });
+}
+
 client.addListener("message", function(from, to, message) {
 	var target, isChannel = false;
 
@@ -178,6 +200,7 @@ client.addListener("message", function(from, to, message) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "notfunny", function() {
 						client.say(target, "sorry :( ( '" + lastLine[target] + "' )");
+						write( lastLine[target], false );
 					});
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
@@ -186,6 +209,7 @@ client.addListener("message", function(from, to, message) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
 						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
+						write( lastLine[target], true );
 					});
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
@@ -206,6 +230,13 @@ client.addListener("message", function(from, to, message) {
 				client.say(target, ALLOWED.join( ", " ) );
 			} else if (message.match(/botsnack/i)) {
 				client.say(target, "nom nom nom");
+			} else if (message.match(/osx/i)) {
+				client.say(target, "Na, FUCK osx.. STABIE STAB STAB");
+			} else if (message.match(/kisom/i)) {
+				fs.readFile( 'kisom.stat', function( err, data ) {
+					if ( err ) throw err;
+					client.say(target, data.toString() );
+				});
 			}
 		} else {
 			lastLine[target] = message;
