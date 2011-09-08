@@ -196,3 +196,4 @@
 "Funny", "man%20i%20want%20one"
 "Funny", "hot"
 "Funny", "This%20is%20100%25%20reproducible."
+"Not Funny", "yay%20mcchunkie"

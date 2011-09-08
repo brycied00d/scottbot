@@ -205,7 +205,7 @@ client.addListener("message", function(from, to, message) {
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			} else if (message.match(/yes|twss/i)) {
+			} else if (message.match(/yes/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
 						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
@@ -239,12 +239,22 @@ client.addListener("message", function(from, to, message) {
 				});
 			}
 		} else {
-			lastLine[target] = message;
-			bayes.classify(message, function(category) {
-				if (category == "funny") {
-					client.say(target, responses[ Math.floor( Math.random() * responses.length )] );
+			if ( message.match( /twss/i ) ) {
+				if ( from in oc( ALLOWED ) ) {
+					bayes.train( lastLine[target], "funny", function() {
+						client.say( target, "ok!" );
+					});
+				} else {
+					sys.print( "blocking learn request from " + from + "\n>" );
 				}
-			});
+			} else {
+				lastLine[target] = message;
+				bayes.classify(message, function(category) {
+					if (category == "funny") {
+						client.say(target, responses[ Math.floor( Math.random() * responses.length )] );
+					}
+				});
+			}
 		}
 	} else {
 		client.say( target, message, ", got it!" );
