@@ -205,7 +205,7 @@ client.addListener("message", function(from, to, message) {
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			} else if (message.match(/yes/i)) {
+			} else if (message.match(/yes|twss/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
 						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
@@ -242,7 +242,7 @@ client.addListener("message", function(from, to, message) {
 			if ( message.match( /twss/i ) ) {
 				if ( from in oc( ALLOWED ) ) {
 					bayes.train( lastLine[target], "funny", function() {
-						client.say( target, "ok!" );
+						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
 						write( lastLine[target], true );
 					});
 				} else {

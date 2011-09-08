@@ -197,3 +197,5 @@
 "Funny", "hot"
 "Funny", "This%20is%20100%25%20reproducible."
 "Not Funny", "yay%20mcchunkie"
+"Funny", "I%20expect%20retards%20to%20cease%20their%20retarded%20behaviour%20posthaste%20and%20join%20the%20ranks%20of%20decent%20society"
+"Not Funny", "I%20expect%20retards%20to%20cease%20their%20retarded%20behaviour%20posthaste%20and%20join%20the%20ranks%20of%20decent%20society"
