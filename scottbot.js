@@ -196,7 +196,8 @@ client.addListener("message", function(from, to, message) {
 
 	if (isChannel) {
 		if (message.indexOf(options.nick) == 0) {
-			if (message.match(/no/i)) {
+			if (message.match(/^no$/i)) {
+			// Need to look at 'message' to determine what exactly we're matching against.
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "notfunny", function() {
 						client.say(target, "sorry :( ( '" + lastLine[target] + "' )");
@@ -205,7 +206,8 @@ client.addListener("message", function(from, to, message) {
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			} else if (message.match(/yes|twss/i)) {
+			} else if (message.match(/^yes|twss$/i)) {
+			// Need to look at 'message' to determine what exactly we're matching against.
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
 						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
@@ -214,11 +216,12 @@ client.addListener("message", function(from, to, message) {
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			} else if (message.match(/lol/i)) {
+			} else if (message.match(/^lol$/i)) {
+			// Need to look at 'message' to determine what exactly we're matching against.
 				bayes.train(lastLine[target], "funny", function() {});
-			} else if (message.match(/br/i)) {
+			} else if (message.match(/^br$/i)) {
 				client.say(target, "Bootie Rockin!");
-			} else if (message.match(/hack/i)) {
+			} else if (message.match(/^hack$/i)) {
 				client.say(target, "I phear you have rooted me!!");
 			} else if (message.match(/o\//i)) {
 				client.say(target, "\\o");
