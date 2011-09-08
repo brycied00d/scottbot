@@ -1,7 +1,29 @@
 require.paths.unshift("./node_modules");
 
+var responses = [
+	"that's what she said",
+	"twss",
+	"TWSS",
+	"That's what CosmiCruz said!",
+	"ohlol, that's what she said"
+];
+
 var sys = require("sys");
 var st = process.openStdin();
+var express = require( 'express' );
+var fs = require( 'fs' );
+var app = module.exports = express.createServer();
+
+app.configure( function( ){
+	app.set( 'views', __dirname + '/views' );
+	app.set( 'view engine', 'jade' );
+	app.use( express.bodyParser( ) );
+	app.use( express.cookieParser( ) );
+	app.use( express.session( { secret: "mcpewpew" } ));
+	app.use( express.methodOverride( ) );
+	app.use( app.router );
+	app.use( express.static( __dirname + '/public' ) );
+});
 
 var brain = require("brain"),
 	irc = require("irc"),
@@ -39,6 +61,32 @@ var brain = require("brain"),
 	}).parseArgs();
 
 lastLine = {};
+
+function createBayes(options) {
+  return new brain.BayesianClassifier({
+      backend: {
+          type: "redis",
+          options: {
+              hostname: options.redisHost,
+              port: options.redisPort,
+              name: "scottbot"
+          }
+      }
+  });
+};
+
+app.get( '/', function( req, res ) {
+	res.render( 'index' );
+});
+
+app.get( '/brains', function( req, res ) {
+	var brain = [];
+	createBayes( options ).toJSON( function( json ) {
+		res.send( [ json ] );
+	});
+});
+
+app.listen( 1337 );
 
 var bayes = new brain.BayesianClassifier({
 	backend: {
@@ -111,6 +159,27 @@ function oc( a ) {
 	return o;
 }
 
+function write( msg, funny ) {
+	var str = '"Not Funny"';
+
+	if ( funny ) str = '"Funny"';
+
+	fs.open('./training_data.txt', 'a', 666, function( e, id ) {
+		fs.write( id, str + ", " + '"' + escape( msg ) + '"\n', null, 'utf8', function(){
+			fs.close(id, function(){
+				console.log( "Added a " + str ) ;
+			});
+		});
+	});
+	// fs.writeFile( './training_data.txt', str + ", " + escape( msg ), function( err ) {
+	// 	if ( err ) {
+	// 		console.log( err );
+	// 	} else {
+	// 		console.log( "Added a " + str ) ;
+	// 	}
+	// });
+}
+
 client.addListener("message", function(from, to, message) {
 	var target, isChannel = false;
 
@@ -130,15 +199,17 @@ client.addListener("message", function(from, to, message) {
 			if (message.match(/no/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "notfunny", function() {
-						client.say(target, "sorry :(");
+						client.say(target, "sorry :( ( '" + lastLine[target] + "' )");
+						write( lastLine[target], false );
 					});
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			} else if (message.match(/yes/i)) {
+			} else if (message.match(/yes|twss/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
-						client.say(target, "ok!");
+						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
+						write( lastLine[target], true );
 					});
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
@@ -153,25 +224,35 @@ client.addListener("message", function(from, to, message) {
 				client.say(target, "\\o");
 			} else if (message.match(/\\o/i)) {
 				client.say(target, "o/");
+			} else if (message.match(/pew/i)) {
+				client.say(target, "pewpewpew");
 			} else if (message.match(/lsAllowed/i)) {
 				client.say(target, ALLOWED.join( ", " ) );
 			} else if (message.match(/botsnack/i)) {
 				client.say(target, "nom nom nom");
+			} else if (message.match(/osx/i)) {
+				client.say(target, "Na, FUCK osx.. STABIE STAB STAB");
+			} else if (message.match(/kisom/i)) {
+				fs.readFile( 'kisom.stat', function( err, data ) {
+					if ( err ) throw err;
+					client.say(target, data.toString() );
+				});
 			}
 		} else {
-			if (message.match(/twss/i)) {
-				if ( from in oc( ALLOWED )) {
-					bayes.train(lastLine[target], "funny", function() {
-						client.say(target, "ok!");
+			if ( message.match( /twss/i ) ) {
+				if ( from in oc( ALLOWED ) ) {
+					bayes.train( lastLine[target], "funny", function() {
+						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
+						write( lastLine[target], true );
 					});
 				} else {
-					sys.print( "blocking learn request from: " + from + "\n>" );
+					sys.print( "blocking learn request from " + from + "\n>" );
 				}
 			} else {
 				lastLine[target] = message;
 				bayes.classify(message, function(category) {
 					if (category == "funny") {
-						client.say(target, "that's what she said");
+						client.say(target, responses[ Math.floor( Math.random() * responses.length )] );
 					}
 				});
 			}

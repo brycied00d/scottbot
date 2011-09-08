@@ -45,6 +45,8 @@ If you really want to run it as a daemon, look at forever_ or supervisord_.
 Training
 ========
 
+From IRC
+--------
 The most important part is going to be training. Your scottbot will start very
 dumb (see TODO_) so you need to teach it.
 
@@ -83,6 +85,27 @@ the previous statement as unfunny. (Unfortunately, right now, it still says
     <mscott> sorry :(
 
 scottbot trained "when is the freeze date for 1.2.3" as a "notfunny" example.
+
+From CLI
+--------
+
+Once the bot is started ( node scottbot.js ), you will be dropped to a
+prompt. From here, you can add users to the ACL and manually set a
+phrase to "funny" or "notfunny".  The available commands are: "addUser",
+"addFunny", and "rmFunny" ( *TODO: add "rmUser"* ).  The syntax is
+<cmd>:<phrase or user>
+
+::
+
+    >addFunny:put it in my inbox
+    Adding funny phrase: put it in my inbox
+    ok!
+    >addUser:potatoman
+    Adding user: potatoman
+    >rmFunny:nerd
+    Removing funny phrase: nerd
+    sorry :(
+    >
 
 
 Bootstrapping
