@@ -205,7 +205,7 @@ client.addListener("message", function(from, to, message) {
 				} else {
 					sys.print( "blocking learn request from: " + from + "\n>" );
 				}
-			} else if (message.match(/yes/i)) {
+			} else if (message.match(/yes|twss/i)) {
 				if ( from in oc( ALLOWED )) {
 					bayes.train(lastLine[target], "funny", function() {
 						client.say(target, "ok! ( '" + lastLine[target] + "' )" );
